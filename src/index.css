@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-surface-950: #05060a;
+  --color-surface-900: #0a0c12;
+  --color-surface-800: #11141f;
+  --color-surface-700: #1a1f2e;
+  --color-surface-600: #252b3d;
+  --color-accent-cyan: #22d3ee;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-emerald: #34d399;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    background-color: var(--color-surface-950);
+    color: #e2e8f0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: linear-gradient(
+      135deg,
+      rgba(17, 20, 31, 0.85) 0%,
+      rgba(10, 12, 18, 0.9) 100%
+    );
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    backdrop-filter: blur(12px);
+  }
+
+  .glow-border {
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.1),
+      0 0 24px -4px rgba(139, 92, 246, 0.25);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #22d3ee 0%, #8b5cf6 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(139, 92, 246, 0.3);
+  }
+}
