@@ -72,48 +72,6 @@ ai-mock-interview-platform/
 
 ---
 
-## ⚙️ Quick Start
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/ai-mock-interview-platform.git
-cd ai-mock-interview-platform
-```
-
-### 2. Install dependencies
-
-```bash
-# Frontend
-cd client && npm install
-
-# Backend
-cd ../server && npm install
-```
-
-### 3. Configure environment variables
-
-Create a `.env` file inside the `server/` directory:
-
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret_key
-OPENAI_API_KEY=your_api_key
-```
-
-### 4. Run the project
-
-```bash
-# Start backend
-cd server && npm run dev
-
-# Start frontend (new terminal)
-cd client && npm run dev
-```
-
----
-
 ## 📌 Project Status
 
 🛠 **Under Active Development**
@@ -129,24 +87,14 @@ Upcoming features:
 
 ---
 
-## 🤝 Contributing
 
-Contributions are welcome!
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit your changes: `git commit -m "Add feature-name"`
-4. Push to GitHub: `git push origin feature-name`
-5. Open a Pull Request
-
----
 
 ## 👩‍💻 Author
 
 **Richa Ranjan**
 
 - GitHub: [@Richa0416](https://github.com/Richa0416)
-- LinkedIn: [richa-ranjan](https://linkedin.com/in/richa-ranjan)
+- LinkedIn: [richa-ranjan](https://www.linkedin.com/in/richa-ranjan-8b9565327/)
 
 ---
 
