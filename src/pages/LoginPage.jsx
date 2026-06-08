@@ -52,23 +52,22 @@ export default function LoginPage() {
           required
         />
 
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 text-slate-400">
-            <input
-              type="checkbox"
-              className="rounded border-slate-600 bg-surface-800 text-violet-500 focus:ring-violet-500/40"
-            />
-            Remember me
-          </label>
-          <button
-  onClick={() =>
-    alert("Password reset link sent successfully!")
-  }
-  className="text-cyan-400 hover:text-cyan-300"
->
-  Forgot Password?
-</button>
-        </div>
+     <div className="flex items-center justify-between">
+  <label className="flex items-center gap-2 text-sm text-gray-400">
+    <input type="checkbox" />
+    Remember me
+  </label>
+
+  <button
+    type="button"
+    onClick={() =>
+      alert("Password reset link sent successfully!")
+    }
+    className="text-cyan-400 hover:text-cyan-300"
+  >
+    Forgot Password?
+  </button>
+</div>
 
         <Button type="submit" className="w-full" size="lg" loading={loading}>
           Sign in
