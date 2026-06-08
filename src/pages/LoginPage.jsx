@@ -60,9 +60,14 @@ export default function LoginPage() {
             />
             Remember me
           </label>
-          <a href="#" className="text-cyan-400 hover:text-cyan-300">
-            Forgot password?
-          </a>
+          <button
+  onClick={() =>
+    alert("Password reset link sent successfully!")
+  }
+  className="text-cyan-400 hover:text-cyan-300"
+>
+  Forgot Password?
+</button>
         </div>
 
         <Button type="submit" className="w-full" size="lg" loading={loading}>

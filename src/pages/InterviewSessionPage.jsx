@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Mic,
   MicOff,
   Pause,
   Play,
   SkipForward,
+  Sparkles,
   Square,
   Video,
   Volume2,
@@ -13,8 +14,14 @@ import {
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
+import PageLoader from '../components/ui/PageLoader';
 import { mockSessionQuestions } from '../data/mockInterviews';
 import { ROUTES } from '../utils/constants';
+import {
+  loadInterviewConfig,
+  loadInterviewQuestions,
+  loadInterviewSessionMeta,
+} from '../utils/generateQuestions';
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
@@ -24,13 +31,38 @@ function formatTime(seconds) {
 
 export default function InterviewSessionPage() {
   const navigate = useNavigate();
+  const [ready, setReady] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [transcript, setTranscript] = useState('');
 
-  const question = mockSessionQuestions[questionIndex];
+  const generatedQuestions = useMemo(
+    () => loadInterviewQuestions(),
+    [ready]
+  );
+
+  const questions = useMemo(
+    () =>
+      generatedQuestions?.length ? generatedQuestions : mockSessionQuestions,
+    [generatedQuestions]
+  );
+
+  const hasCustomQuestions = Boolean(generatedQuestions?.length);
+
+  const sessionMeta = useMemo(
+    () => loadInterviewSessionMeta(),
+    [ready]
+  );
+  const sessionConfig = useMemo(() => loadInterviewConfig(), [ready]);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  const question = questions[questionIndex];
+  const total = questions.length;
 
   useEffect(() => {
     if (isPaused) return undefined;
@@ -43,7 +75,7 @@ export default function InterviewSessionPage() {
   };
 
   const handleNext = () => {
-    if (questionIndex < mockSessionQuestions.length - 1) {
+    if (questionIndex < total - 1) {
       setQuestionIndex((i) => i + 1);
       setTranscript('');
     } else {
@@ -51,24 +83,52 @@ export default function InterviewSessionPage() {
     }
   };
 
+  if (!ready || !question) {
+    return <PageLoader message="Loading interview session..." />;
+  }
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <Badge color="rose" className="animate-pulse-glow">
-            LIVE
-          </Badge>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge color="rose" className="animate-pulse-glow">
+              LIVE
+            </Badge>
+            {sessionMeta?.isAiGenerated && (
+              <Badge color="cyan">
+                <Sparkles className="mr-1 inline h-3 w-3" />
+                AI Questions
+              </Badge>
+            )}
+          </div>
           <h1 className="mt-2 text-xl font-bold text-slate-100 md:text-2xl">
-            Mock Interview Session
+            {sessionConfig?.title || 'Mock Interview Session'}
           </h1>
           <p className="text-sm text-slate-400">
-            Question {questionIndex + 1} of {mockSessionQuestions.length}
+            Question {questionIndex + 1} of {total}
+            {sessionMeta?.roleLabel && (
+              <span className="text-slate-500">
+                {' '}
+                · {sessionMeta.roleLabel} · {sessionMeta.experienceLabel}
+              </span>
+            )}
           </p>
         </div>
         <div className="font-mono text-2xl font-bold text-cyan-400">
           {formatTime(elapsed)}
         </div>
       </div>
+
+      {sessionMeta?.techLabels?.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {sessionMeta.techLabels.map((label) => (
+            <Badge key={label} color="slate">
+              {label}
+            </Badge>
+          ))}
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3 space-y-4">
@@ -148,9 +208,7 @@ export default function InterviewSessionPage() {
                 className="flex-1"
                 onClick={handleNext}
               >
-                {questionIndex < mockSessionQuestions.length - 1
-                  ? 'Next Question'
-                  : 'Finish'}
+                {questionIndex < total - 1 ? 'Next Question' : 'Finish'}
               </Button>
               <Button variant="danger" icon={Square} onClick={handleEnd}>
                 End
@@ -162,10 +220,19 @@ export default function InterviewSessionPage() {
             <div
               className="h-full bg-gradient-to-r from-cyan-500 to-violet-600 transition-all duration-500"
               style={{
-                width: `${((questionIndex + 1) / mockSessionQuestions.length) * 100}%`,
+                width: `${((questionIndex + 1) / total) * 100}%`,
               }}
             />
           </div>
+
+          {!hasCustomQuestions && (
+            <p className="text-center text-xs text-slate-500">
+              Using default questions.{' '}
+              <Link to={ROUTES.SETUP} className="text-cyan-400 hover:underline">
+                Configure setup
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </div>
